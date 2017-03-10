@@ -23,7 +23,7 @@ Aqui ferramentas e tecnologias utilizadas
 
 ### Intação/Configuração
 
-Algumas referências uteis para a configuração
+Algumas referências úteis para a configuração
 
 ```
 - https://www.ntu.edu.sg/home/ehchua/programming/howto/Tomcat_HowTo.html
