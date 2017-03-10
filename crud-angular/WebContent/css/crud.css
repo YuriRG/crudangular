@@ -1,0 +1,53 @@
+@CHARSET "utf-8";
+
+h1 {
+	margin-left: 6px;
+	text-align: center;
+}
+
+h2 {
+	margin-left: 6px;
+}
+
+div .botoes {
+	float:right;
+	margin: 6px 6px 12px 6px;
+	clear: both;
+	width: 100%;
+}
+
+div .botoes > button {
+	margin-left: 6px;
+	float: right;
+}
+
+.tnavegator {
+	margin-top: 0px;
+	margin-left:auto; 
+	margin-right:auto; 
+	width:95%;
+}
+
+div .tnavegator > ul {
+	margin-top: 0px;
+}
+
+.tabela {
+	margin-left:auto; 
+	margin-right:auto; 
+	width:95%;
+}
+
+.tcenter
+{
+    text-align: center;
+}
+
+/*Ordenação*/
+
+.sortorder:after {
+  content: '\25b2';   // BLACK UP-POINTING TRIANGLE
+}
+.sortorder.reverse:after {
+  content: '\25bc';   // BLACK DOWN-POINTING TRIANGLE
+}

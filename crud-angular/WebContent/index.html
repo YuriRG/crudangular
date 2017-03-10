@@ -1,0 +1,239 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="pt-br" ng-app="crudApp">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>Locação WEB</title>
+	<link rel="icon" href="image/favicon2.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="image/favicon2.ico" type="image/x-icon">
+	
+	<!-- CSS -->
+	<!-- bootstrap -->
+	<!-- 
+	 <link href="lib/bootstrap/bootstrap.min.css" rel="stylesheet">
+	 -->
+	 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/crud.css" rel="stylesheet">
+	<!-- 
+		<link href="lib/ngtable/ng-table.min.css" rel="stylesheet">
+		 -->
+	<!-- CSS -->
+	
+	<!-- JAVASCRIPT -->
+	<!-- angular -->
+	<!-- 
+		<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
+		 -->
+	<script src="lib/angular/angular.min.js"></script>
+	<script src="lib/angular/angular-locale_pt-br.js"></script>
+	<script src="js/crudApp.js"></script>
+	<script src="js/crudControler.js"></script>
+	<script data-require="ui-bootstrap@*" data-semver="1.3.2"
+		src="https://cdn.rawgit.com/angular-ui/bootstrap/gh-pages/ui-bootstrap-tpls-1.3.2.js"></script>
+	
+	<!-- jquery -->
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<!-- bootstrap -->
+	<script src="lib/bootstrap/bootstrap.min.js"></script>
+	
+	
+	<!--
+		<script src="lib/ngtable/ng-table.min.js"></script> 
+		 -->
+	
+	<!-- JAVASCRIPT -->
+
+</head>
+<body>
+	<div ng-controller="carroCtrl">
+	
+		<h1>Locação de Veículos</h1>
+
+		<!-- Filtro -->
+		<div >
+			<hr>
+			<h2>Filtro:</h2>
+
+			<form class="form-horizontal">
+				
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="marca">Marca:</label>
+					<div class="col-sm-2">
+						<input type="text" class="form-control" id="marca" ng-model="filtro.marca">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="modelo">Modelo:</label>
+					<div class="col-sm-2">
+						<input type="text" class="form-control" id="modelo" ng-model="filtro.modelo">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="placa">Placa:</label>
+					<div class="col-sm-2">
+						<input type="text" class="form-control" id="placa" ng-model="filtro.placa">
+					</div>
+				</div>	
+
+			</form>
+		</div>
+	
+		<!-- TABELA -->
+		<hr>
+		<div class="botoes">		
+			<button type="button" class="btn btn-primary" ng-click="cadastrar()">Cadastrar</button>
+		</div>
+		
+		<table border="1" class="table table-striped table-bordered table-hover tabela" >
+			<tr>
+				 <th>
+					<button ng-click="sortBy('marca')">Marca</button>
+        			<span class="sortorder" ng-show="propertyName === 'marca'" ng-class="{reverse: reverse}"></span>
+        		</th>
+				 <th>
+					<button ng-click="sortBy('modelo')">Modelo</button>
+        			<span class="sortorder" ng-show="propertyName === 'modelo'" ng-class="{reverse: reverse}"></span>
+        		</th>
+				 <th>
+					<button ng-click="sortBy('placa')">Placa</button>
+        			<span class="sortorder" ng-show="propertyName === 'placa'" ng-class="{reverse: reverse}"></span>
+        		</th>
+        		<th>
+					<button ng-click="sortBy('dtlocacao')">Data Locação</button>
+        			<span class="sortorder" ng-show="propertyName === 'dtlocacao'" ng-class="{reverse: reverse}"></span>
+        		</th>
+				 <th></th>
+			</tr>
+
+			<tr ng-repeat="c in carros | orderBy:propertyName:reverse | filter: filtro">
+				<td class="col-lg-2">{{ c.marca }}</td>
+				<td class="col-lg-2">{{ c.modelo }}</td>
+				<td class="col-lg-2">{{ c.placa }}</td>
+				<td class="col-lg-2">{{ c.dtlocacao | date : "dd/MM/y" }}</td>
+				<td class="col-lg-1 tcenter">
+
+			        <a href="#" class="btn btn-danger btn-lg" title="Deletar" data-toggle="modal" data-target="#myModal"  ng-click="modal(c.id)">
+			          <span class="glyphicon glyphicon-trash"></span>
+			        </a>
+			        <a href="#" class="btn btn-primary btn-lg" title="Editar" ng-click="editar(c)">
+			          <span class="glyphicon glyphicon-pencil"></span>
+			        </a>				
+				</td>
+			</tr>
+		</table>
+		<div class="tnavegator">
+			<uib-pagination total-items="totalItems" items-per-page="itemsPerPage"
+				previous-text="Anterior" next-text="Próximo" 
+				first-text="Primeiro" last-text="Último"
+				boundary-links="true"
+				ng-model="currentPage"></uib-pagination>
+		</div>		
+		
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" role="dialog">
+		  <div class="modal-dialog">
+		  
+		    <!-- Modal content-->
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal">&times;</button>
+		        <h4 class="modal-title">Confirmação</h4>
+		      </div>
+		      <div class="modal-body">
+		        <p>Deseja deletar locação ?</p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Não</button>
+		        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="deletar()">Sim</button>
+		      </div>
+		    </div>
+		    
+		  </div>
+		</div>
+			
+			
+
+
+		<!-- FORMULARIO -->
+		<div ng-show="exibeFormulario">
+			<hr>
+			<h2>Formulário Carro:</h2>
+
+			<form class="form-horizontal">
+				<input type="hidden" ng-model="carro.id">
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="marca">Marca !:</label>
+					<div class="col-sm-2">
+						<input type="text" class="form-control" id="marca" ng-model="carro.marca">
+						<p ng-show="msgMarca" class="alert alert-danger alert-dismissable">
+							<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+							{{msgMarca}}
+						</p>	
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="modelo">Modelo !:</label>
+					<div class="col-sm-2">
+						<input type="text" class="form-control" id="modelo" ng-model="carro.modelo">
+						<p ng-show="msgModelo" class="alert alert-danger alert-dismissable">
+							<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+							{{msgModelo}}
+						</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="placa">Placa !:</label>
+					<div class="col-sm-2">
+						<input type="text" class="form-control" id="placa" ng-model="carro.placa">
+						<p ng-show="msgPlaca" class="alert alert-danger alert-dismissable">
+							<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+							{{msgPlaca}}
+						</p>
+					</div>
+				</div>				
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="locatario">Locatário :</label>
+					<div class="col-sm-2">
+						<input type="text" class="form-control" id="locatario" ng-model="carro.locatario">
+						<p ng-show="msgLocatario" class="alert alert-danger alert-dismissable">
+							<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+							{{msgLocatario}}
+						</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="dtlocacao">Data Locação !:</label>
+					<div class="col-sm-2">
+						<input type="text" class="form-control" id="dtlocacao" ng-model="carro.dtlocacao">
+						<p ng-show="msgDtLocacao" class="alert alert-danger alert-dismissable">
+							<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+							{{msgDtLocacao}}
+						</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="placa">Data Entrega :</label>
+					<div class="col-sm-2">
+						<input type="text" class="form-control" id="placa" ng-model="carro.dtentrega">
+						<p ng-show="msgDtEntrega" class="alert alert-danger alert-dismissable">
+							<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+							{{msgDtEntrega}}
+						</p>						
+					</div>
+				</div>
+				
+				<div class="botoes">
+					<button type="reset" class="btn btn-default">Limpar</button>
+					<button type="button" class="btn btn-danger" ng-click="fechar()">Fechar</button>
+					<button type="button" class="btn btn-primary" ng-click="salvar()">Salvar</button>
+				</div>
+
+			</form>
+		</div>
+	</div>
+</body>
+</html>
